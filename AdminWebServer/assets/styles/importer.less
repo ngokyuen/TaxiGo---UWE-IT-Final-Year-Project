@@ -1,0 +1,99 @@
+/**
+ * importer.less
+ *
+ * By default, new Sails projects are configured to compile this file
+ * from LESS to CSS.  Unlike CSS files, LESS files are not compiled and
+ * included automatically unless they are imported below.
+ *
+ * The LESS files imported below are compiled and included in the order
+ * they are listed.  Mixins, variables, etc. should be imported first
+ * so that they can be accessed by subsequent LESS stylesheets.
+ *
+ * (Just like the rest of the asset pipeline bundled in Sails, you can
+ * always omit, customize, or replace this behavior with SASS, SCSS,
+ * or any other Grunt tasks you like.)
+ */
+
+
+
+// For example:
+//
+// @import 'variables/colors.less';
+// @import 'mixins/foo.less';
+// @import 'mixins/bar.less';
+// @import 'mixins/baz.less';
+//
+// @import 'styleguide.less';
+// @import 'pages/login.less';
+// @import 'pages/signup.less';
+//
+// etc.
+
+table {
+    border-collapse: collapse;
+
+    tr {
+        //padding: 0px 0px 120px 0px;
+
+        // border-bottom: 1px solid black;
+        th {
+            border-bottom: 1px solid black;
+            text-align: center;
+            padding: 5px 10px 5px 10px;
+        }
+        td {
+            border-bottom: 1px solid #f2f2f2;
+            text-align: center;
+            padding: 15px 10px 15px 10px;
+        }
+    }
+    tr[data-id]:hover {
+        background-color: #000;
+        color: #FFF;
+    }
+}
+
+.popup_background {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: #000;
+}
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    input, select {
+        font-size: 18px;
+    }
+    background-color: #FFF;
+}
+
+.navbar {
+    ul {
+        padding:0px;
+        margin:0px;
+        li {
+            display: inline;
+            a:hover, a:visited ,a:link ,a:active {
+                text-decoration: none;
+                margin-right: 10px;
+                font-size: 18px;
+            }
+        }
+    }
+}
+
+body {
+    padding:10px 20px 10px 20px;
+    margin:0px;
+    font-size: 14px;
+}
+
+.hidden {
+    display: none;
+}
+

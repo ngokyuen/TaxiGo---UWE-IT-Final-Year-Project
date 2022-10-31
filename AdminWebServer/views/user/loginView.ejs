@@ -1,0 +1,51 @@
+<div class="popup">
+    <form id="login" method="POST" action="/login">
+    <table>
+        <tr>
+            <td colspan="2">
+                <h1>Taxt Go Admin</h1>
+            </td>
+        </tr>
+        <tr>
+            <td>Username</td>
+            <td><input type="text" name="username" /></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type="password" name="password" /></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Sign in" /></td>
+        </tr>
+        <tr>
+            <td colspan="2" name="message"></td>
+        </tr>
+    </table>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $("#login").submit(function(){
+            username = $("#login").find("input[name='username']").val();
+            password = $("#login").find("input[name='password']").val();
+            $.ajax({
+                url: '/login',
+                data:{username:username, password:password},
+                method: "POST",
+                error: function(xhr){
+                    alert("Error");
+                },
+                success: function(res){
+                    if(res.result){
+                        location.href="/order";
+                    } else {
+                        $("#login").find("[name='message']").html(res.message);
+                    }
+                },
+            });
+
+            return false;
+        });
+    });
+</script>

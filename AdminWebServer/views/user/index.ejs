@@ -1,0 +1,139 @@
+<%- partial('../partials/header.ejs') %>
+<div>
+    <h3>Users</h3>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>E-Mail</th>
+            <th>Address</th>
+            <th>Mobile</th>
+            <th>Type</th>
+            <th>Birthday</th>
+        </tr>
+
+        <% _.each(users, function(user){ %>
+            <tr data-id="<%= user.id %>" data-model="user">
+                <td name="user_id"><%= user.id %></td>
+                <td name="username"><%= user.username %></td>
+                <td name="firstname"><%= user.firstname %></td>
+                <td name="lastname"><%= user.lastname %></td>
+                <td name="email"><%= user.email %></td>
+                <td name="address"><%= user.address %></td>
+                <td name="mobile"><%= user.mobile %></td>
+                <td name="type"><%= user.type %></td>
+                <td name="birthday"><%= user.birthday %></td>
+            </tr>
+        <% }); %>
+    </table>
+</div>
+
+<div id="edit_user_background" class="popup_background hidden" onclick="hiddenEditUser();"></div>
+<div data-id="" data-model="edit_user" id="edit_user" class="popup hidden">
+    <table>
+        <tr>
+            <th colspan="4">Edit User</th>
+        </tr>
+        <tr>
+            <td>Username</td>
+            <td><input type="text" name="username" /></td>
+            <td>First Name</td>
+            <td><input type="text" name="firstname" /></td>
+        </tr>
+
+        <tr>
+            <td>Last Name</td>
+            <td><input type="text" name="lastname" /></td>
+            <td>E-Mail</td>
+            <td><input type="text" name="email" /></td>
+        </tr>
+
+        <tr>
+            <td>Address</td>
+            <td><input type="text" name="address" /></td>
+            <td>Mobile</td>
+            <td><input type="text" name="mobile" /></td>
+        </tr>
+        <tr>
+            <td>Type</td>
+            <td><select name="type">
+                <option value="">Passeneger</option>
+                <option value="driver">Driver</option>
+                <option value="admin">Admin</option>
+            </select></td>
+            <td>Birthday</td>
+            <td><input type="text" name="birthday" /></td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <input type="submit" value="Submit" onclick="submitEditUser();" />
+                <input type="button" value="Close" onclick="hiddenEditUser();" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $("tr[data-model='user']").click(function(){
+            user_id = $(this).attr("data-id");
+            username = $(this).find("td[name='username']").text();
+            firstname = $(this).find("td[name='firstname']").text();
+            lastname = $(this).find("td[name='lastname']").text();
+            email = $(this).find("td[name='email']").text();
+            address = $(this).find("td[name='address']").text();
+            mobile = $(this).find("td[name='mobile']").text();
+            type = $(this).find("td[name='type']").text();
+            birthday = $(this).find("td[name='birthday']").text();
+            
+            $("#edit_user").attr("data-id",user_id);
+            $("#edit_user").find("input[name='username']").val(username);
+            $("#edit_user").find("input[name='firstname']").val(firstname);
+            $("#edit_user").find("input[name='lastname']").val(lastname);
+            $("#edit_user").find("input[name='email']").val(email);
+            $("#edit_user").find("input[name='address']").val(address);
+            $("#edit_user").find("input[name='mobile']").val(mobile);
+            $("#edit_user").find("select[name='type']").val(type);
+            $("#edit_user").find("input[name='birthday']").val(birthday);
+            showEditUser();
+        });
+    });
+
+    function submitEditUser(){
+        user_id = $("#edit_user").attr("data-id");
+        username = $("#edit_user").find("input[name='username']").val();
+        firstname = $("#edit_user").find("input[name='firstname']").val();
+        lastname = $("#edit_user").find("input[name='lastname']").val();
+        email = $("#edit_user").find("input[name='email']").val();
+        address = $("#edit_user").find("input[name='address']").val();
+        mobile = $("#edit_user").find("input[name='mobile']").val();
+        type = $("#edit_user").find("select[name='type']").val();
+        birthday = $("#edit_user").find("input[name='birthday']").val();
+
+        $.ajax({
+            method: "POST",
+            url: '/user/edit/' + user_id,
+            data: {username:username, firstname:firstname, lastname:lastname,
+                email:email,address:address,mobile:mobile,type:type,birthday:birthday
+            },
+            error: function(xhr){
+                alert("Error");
+            },
+            success: function(res){
+                hiddenEditUser();
+                location.reload();
+            },
+        });
+    }
+
+    function showEditUser(){
+        $("#edit_user_background").show();
+        $("#edit_user").show();
+    }
+    function hiddenEditUser(){
+        $("#edit_user_background").hide();
+        $("#edit_user").hide();
+    }
+</script>

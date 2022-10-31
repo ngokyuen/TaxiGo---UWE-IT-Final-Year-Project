@@ -1,0 +1,126 @@
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+<!-- paypal start -->
+<script>
+
+    function showPaypalButton(){
+        $("#paypal-button").show();
+    }
+
+    function hidePaypalButton(){
+        
+        $("#paypal-button").hide();
+    }
+
+    function updatePriceMessage(msg){
+        if (msg == undefined || msg == null){
+            msg = "";
+        }
+        $("[name='price_message']").html(msg);
+    }
+
+    function checkPrice(){
+        var price = $("[name='price']").val();
+            if (price == undefined || price == null || price == ''){
+                updatePriceMessage('Please enter a price');
+                hidePaypalButton();
+            } else {
+                var price = parseFloat(price);
+                if (isNaN(price)){
+                    updatePriceMessage('Not a price');
+                } else if (price <= 0) {
+                    updatePriceMessage("Not Accept $0 or less");
+                    hidePaypalButton();
+                } else {
+                    updatePriceMessage();
+                    showPaypalButton();
+                }
+                
+            }
+    }
+
+
+    paypal.Button.render({
+    
+        // env: 'production', // Or 'sandbox'
+        env: 'sandbox',
+        style: {
+            label: 'buynow',
+            fundingicons: true, // optional
+            branding: true, // optional
+            size:  'small', // small | medium | large | responsive
+            shape: 'rect',   // pill | rect
+            color: 'gold'   // gold | blue | silve | black
+        },
+        client: {
+            sandbox:    'AZ3PMgqHLy8iK1_CI4TFci1jEYQDpc0FpbeX3PDGjkxyAg-7CHjPZvhCHHYTJReUnp3Jnp-l9Y4prB_u',
+            production: 'xxxxxxxxx'
+        },
+    
+        // commit: true, // Show a 'Pay Now' button
+    
+        payment: function(data, actions) {
+            return actions.payment.create({
+                // payment: {
+                    transactions: [
+                        {
+                            amount: { total: $("[name='price']").val(), currency: 'HKD' }
+                        }
+                    ]
+                // }
+            });
+        },
+    
+        onAuthorize: function(data, actions) {
+            return actions.payment.execute().then(function(payment) {
+                //alert("paypal completed");
+                if (payment != null || payment != undefined){
+                    //alert("Payment Completed");
+                    $.ajax({
+                       url: '/paypal',
+                       method: 'POST',
+                       data: {token: '<%= token %>', order_id: '<%= order_id %>' },
+                       error: function(xhr){
+                           alert("Try Again");
+                       },
+                       success: function(res){
+                           if (res.result){
+                               alert("Pay Success");
+                           } else {
+                               alert("Pay Fail");
+                           }
+                       }
+                    });
+                }
+
+                // The payment is complete!
+                // You can now show a confirmation message to the customer
+            });
+        }
+    
+    }, '#paypal-button');
+</script>
+<!-- paypal end -->
+
+<div class="popup" style="font-size:18px;">
+    <h1 style="text-align:center;">Taxi Go Paypal</h1>
+    <table>
+        <tr>
+            <td>Price:</td>
+            <td><input type="text" name="price" autofocus   onkeyup="checkPrice();" /></td>
+        </tr>
+        <tr>
+            <td style="color:red;" name="price_message" colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div id="paypal-button"></div>
+            </td>
+        </tr>
+    
+    </table>
+</div>
+
+<script>
+checkPrice();
+hidePaypalButton();
+</script>

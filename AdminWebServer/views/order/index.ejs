@@ -1,0 +1,214 @@
+
+<%- partial('../partials/header.ejs') %>
+<div>
+    <h3>Orders</h3>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Departure</th>
+            <th>Destination</th>
+            <!-- <th>Start Date</th>
+            <th>Start Time</th> -->
+            <th>Start DateTime</th>
+            <th>Contact Person</th>
+            <th>Contact No</th>
+            <th>Five Seat?</th>
+            <th>Share Seat?</th>
+            <th>Share Seat</th>
+            <th>Price</th>
+            <th>Payment Method</th>
+            <th>Status</th>
+            <th>User</th>
+            <th>Driver</th>
+        </tr>
+
+        <% _.each(orders, function(order){ %>
+            <tr data-id="<%= order.id %>" data-model="order">
+                <td><%= order.id %></td>
+                <td name="departure"><%= order.departure %></td>
+                <td name="destination"><%= order.destination %></td>
+                <!-- <td><%= order.startDate %></td>
+                <td><%= order.startTime %></td> -->
+                <td name="startDateTime"><%= order.startDateTime %></td>
+                <td name="contactPerson"><%= order.contactPerson %></td>
+                <td name="contactContactNo"><%= order.contactContactNo %></td>
+                <td name="isFiveSeat"><%= (order.isFiveSeat)? order.isFiveSeat: 'false' %></td>
+                <td name="isShare"><%= (order.isShare)? order.isShare: 'false' %></td>
+                <td name="shareSeat"><%= order.shareSeat %></td>
+                <td name="price"><%= order.price %></td>
+                <td name="paymentMethod"><%= order.paymentMethod %></td>
+                <td name="status"><%= order.status %></td>
+                <td name="user"><%= order.user %></td>
+                <td name="driver"><%= order.driver %></td>
+            </tr>
+        <% }); %>
+    </table>
+</div>
+
+<div id="edit_order_background" class="popup_background hidden" onclick="hiddenEditOrder();"></div>
+<div data-id="" data-model="edit_order" id="edit_order" class="popup hidden">
+    <table>
+        <tr>
+            <th colspan="4">Edit Order</th>
+        </tr>
+        <tr>
+            <td>Departure</td>
+            <td><input type="text" name="departure" /></td>
+            <td>Destination</td>
+            <td><input type="text" name="destination" /></td>
+        </tr>
+
+        <tr>
+            <td>Start DateTime</td>
+            <td><input type="text" name="startDateTime" /></td>
+            <td>Contact Person</td>
+            <td><input type="text" name="contactPerson" /></td>
+        </tr>
+
+        <tr>
+            <td>ContactNo</td>
+            <td><input type="text" name="contactContactNo" /></td>
+            <td>Five Seat?</td>
+            <td><select name="isFiveSeat">
+                    <option value="true">true</option>
+                    <option value="false">false</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Share Seat?</td>
+            <td>
+                <select name="isShare">
+                    <option value="true">true</option>
+                    <option value="false">false</option>
+                </select>
+            </td>
+            <td>Share Seat</td>
+            <td><input type="text" name="shareSeat" /></td>
+        </tr>
+        <tr>
+            <td>Price</td>
+            <td><input type="text" name="price" /></td>
+            <td>Payment Method</td>
+            <td>
+                <select name="paymentMethod">
+                    <option value="">None</option>
+                    <option value="CASH">Cash</option>
+                    <option value="ALIPAY">Alipay</option>
+                    <option value="PAYPAL">Paypal</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td><select name="status">
+                    <option value="PENDING">Pending</option>
+                    <option value="PICKED">Picked</option>
+                    <option value="TRANSITING">Transiting</option>
+                    <option value="ARRIVAL">Arrival</option>
+                    <option value="COMPLETED">Completed</option>
+                    <option value="CANCELLED">Cancelled</option>
+                </select>
+            </td>
+            <td>User</td>
+            <td><input type="text" name="user" disabled /></td>
+        </tr>
+
+        <tr>
+            <td>Driver</td>
+            <td><input type="text" name="driver" disabled /></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td colspan="4">
+                <input type="submit" value="Submit" onclick="submitEditOrder();" />
+                <input type="button" value="Close" onclick="hiddenEditOrder();" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+<script>
+    $(document).ready(function(){
+        $("tr[data-model='order']").click(function(){
+            order_id = $(this).attr("data-id");
+            departure = $(this).find("td[name='departure']").text();
+            destination = $(this).find("td[name='destination']").text();
+            startDateTime = $(this).find("td[name='startDateTime']").text();
+            contactPerson = $(this).find("td[name='contactPerson']").text();
+            contactContactNo = $(this).find("td[name='contactContactNo']").text();
+            isFiveSeat = $(this).find("td[name='isFiveSeat']").text();
+            isShare = $(this).find("td[name='isShare']").text();
+            shareSeat = $(this).find("td[name='shareSeat']").text();
+            price = $(this).find("td[name='price']").text();
+            paymentMethod = $(this).find("td[name='paymentMethod']").text();
+            status = $(this).find("td[name='status']").text();
+            user = $(this).find("td[name='user']").text();
+            driver = $(this).find("td[name='driver']").text();
+            
+            $("#edit_order").attr("data-id",order_id);
+            $("#edit_order").find("input[name='departure']").val(departure);
+            $("#edit_order").find("input[name='destination']").val(destination);
+            $("#edit_order").find("input[name='startDateTime']").val(startDateTime);
+            $("#edit_order").find("input[name='contactPerson']").val(contactPerson);
+            $("#edit_order").find("input[name='contactContactNo']").val(contactContactNo);
+            $("#edit_order").find("select[name='isFiveSeat']").val(isFiveSeat);
+            $("#edit_order").find("select[name='isShare']").val(isShare);
+            $("#edit_order").find("input[name='shareSeat']").val(shareSeat);
+            $("#edit_order").find("input[name='price']").val(price);
+            $("#edit_order").find("select[name='paymentMethod']").val(paymentMethod);
+            $("#edit_order").find("select[name='status']").val(status);
+            $("#edit_order").find("input[name='user']").val(user);
+            $("#edit_order").find("input[name='driver']").val(driver);
+            showEditOrder();
+        });
+    });
+
+    function submitEditOrder(){
+        order_id = $("#edit_order").attr("data-id");
+        departure = $("#edit_order").find("input[name='departure']").val();
+        destination = $("#edit_order").find("input[name='destination']").val();
+        startDateTime = $("#edit_order").find("input[name='startDateTime']").val();
+        contactPerson = $("#edit_order").find("input[name='contactPerson']").val();
+        contactContactNo = $("#edit_order").find("input[name='contactContactNo']").val();
+        isFiveSeat = $("#edit_order").find("select[name='isFiveSeat']").val();
+        isShare = $("#edit_order").find("select[name='isShare']").val();
+        shareSeat = $("#edit_order").find("input[name='shareSeat']").val();
+        price = $("#edit_order").find("input[name='price']").val();
+        paymentMethod = $("#edit_order").find("select[name='paymentMethod']").val();
+        status = $("#edit_order").find("select[name='status']").val();
+        user = $("#edit_order").find("input[name='user']").val();
+        driver = $("#edit_order").find("input[name='driver']").val();
+
+        $.ajax({
+            method: "POST",
+            url: '/order/edit/' + order_id,
+            data: {
+                departure:departure,destination:destination,startDateTime:startDateTime,
+                contactPerson:contactPerson,contactContactNo:contactContactNo,
+                isFiveSeat:isFiveSeat, isShare:isShare, shareSeat:shareSeat,
+                price:price, paymentMethod:paymentMethod, status:status,
+                user:user,
+            },
+            error: function(xhr){
+                alert("Error");
+            },
+            success: function(res){
+                hiddenEditOrder();
+                location.reload();
+            },
+        });
+    }
+
+    function showEditOrder(){
+        $("#edit_order_background").show();
+        $("#edit_order").show();
+    }
+    function hiddenEditOrder(){
+        $("#edit_order_background").hide();
+        $("#edit_order").hide();
+    }
+</script>

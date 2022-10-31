@@ -1,0 +1,37 @@
+{
+	"name": "MobileClient2",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"start": "node node_modules/react-native/local-cli/cli.js start",
+		"test": "jest"
+	},
+	"dependencies": {
+		"react": "16.0.0-alpha.12",
+		"react-native": "0.47.2",
+		"react-native-checkbox-heaven": "^0.1.4",
+		"react-native-datepicker": "^1.6.0",
+		"react-native-geocoder": "^0.4.8",
+		"react-native-immediate-phone-call": "^1.0.0",
+		"react-native-maps": "^0.16.4",
+		"react-native-modal-dropdown": "^0.5.0",
+		"react-native-phone-call": "^1.0.4",
+		"react-native-popup-dialog": "^0.9.41",
+		"react-native-snackbar": "^0.4.4",
+		"react-native-vector-icons": "^4.5.0",
+		"react-native-voice": "^0.2.5",
+		"react-navigation": "^1.0.0-beta.22",
+		"react-redux": "^5.0.6",
+		"redux": "^3.7.2",
+		"watchman": "^0.1.8"
+	},
+	"devDependencies": {
+		"babel-jest": "20.0.3",
+		"babel-preset-react-native": "2.0.1",
+		"jest": "20.0.4",
+		"react-test-renderer": "16.0.0-alpha.12"
+	},
+	"jest": {
+		"preset": "react-native"
+	}
+}
